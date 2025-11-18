@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Site IA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <style>
+    .fade-in { animation: fadeIn 0.6s ease forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); }}
+  </style>
+</head><body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-3xl mx-auto text-center mb-10">
+    <h1 class="text-4xl font-extrabold mb-4">Générateur de Site IA — Version HTML</h1>
+    <p class="text-gray-700">Remplis les informations et l'IA génère automatiquement ton site</p>
+  </div>  <div class="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-xl">
+    <label class="font-semibold">Type d'entreprise</label>
+    <input id="businessType" class="w-full p-3 mt-2 mb-4 border rounded-xl" placeholder="Ex: Restaurant, Boutique..." /><label class="font-semibold">Description (optionnel)</label>
+<textarea id="description" class="w-full p-3 mt-2 h-28 border rounded-xl mb-4" placeholder="Décris ton entreprise..."></textarea>
+
+<label class="font-semibold">Choisir un thème</label>
+<select id="theme" class="w-full p-3 mt-2 mb-6 border rounded-xl">
+  <option value="luxury">Luxe</option>
+  <option value="minimal">Minimaliste</option>
+  <option value="dark">Sombre</option>
+  <option value="ocean">Océan</option>
+</select>
+
+<button onclick="generateSite()" id="generateBtn" class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold text-lg">Générer le site</button>
+
+  </div>  <div id="result" class="max-w-4xl mx-auto mt-10"></div><script>
+function generateSite() {
+  const business = document.getElementById("businessType").value;
+  const desc = document.getElementById("description").value;
+  const theme = document.getElementById("theme").value;
+  const result = document.getElementById("result");
+
+  if (!business) return alert("Ajoute un type d'entreprise !");
+
+  const themes = {
+    luxury: "bg-gradient-to-br from-yellow-500 to-yellow-700 text-white",
+    minimal: "bg-white text-gray-900 border border-gray-300",
+    dark: "bg-gradient-to-br from-gray-900 to-gray-700 text-white",
+    ocean: "bg-gradient-to-br from-cyan-500 to-blue-700 text-white",
+  };
+
+  const sections = [
+    {
+      title: "Présentation",
+      text: desc || `Découvrez ${business}, un service haut de gamme conçu pour satisfaire vos besoins.`
+    },
+    {
+      title: "Pourquoi nous choisir ?",
+      text: `${business} offre une expertise inégalée, des solutions personnalisées et une satisfaction garantie.`
+    },
+    {
+      title: "Services",
+      text: `Nos services sont adaptés à vos exigences et garantissent une expérience de qualité.`
+    },
+    {
+      title: "Avis Clients",
+      text: `"Un service incroyable, je recommande ${business} !" - Client satisfait`
+    },
+    {
+      title: "Contact",
+      text: `Contactez l'équipe ${business} pour démarrer votre projet.`
+    }
+  ];
+
+  let html = `<div class='p-10 rounded-3xl shadow-xl ${themes[theme]} fade-in'>`;
+  html += `<h2 class='text-4xl font-extrabold mb-6'>Site Pro — ${business}</h2>`;
+
+  sections.forEach(section => {
+    html += `<div class='mb-8'>
+      <h3 class='text-2xl font-bold mb-2'>${section.title}</h3>
+      <p class='text-lg'>${section.text}</p>
+    </div>`;
+  });
+
+  html += `<button onclick='exportHTML()' class='mt-6 p-4 rounded-xl bg-black bg-opacity-30 backdrop-blur-md'>Exporter en HTML</button>`;
+
+  html += `</div>`;
+
+  result.innerHTML = html;
+}
+
+function exportHTML() {
+  const content = document.getElementById("result").innerHTML;
+  const file = new Blob([content], { type: "text/html" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(file);
+  a.download = "site_genere.html";
+  a.click();
+}
+</script></body>
+</html>
